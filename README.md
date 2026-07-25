@@ -1,8 +1,6 @@
-# 不再同步更新旧仓库 tencent/cube-studio
+# 不再同步更新旧仓库 tencentmusic/cube-studio
 
 # CubeStudio
-
-[English](README_EN.md) | 简体中文
 
 ### 整体架构
 
@@ -190,7 +188,7 @@ cube会自动为用户挂载用户的个人目录，同一个用户在平台任�
  - 支持vscode，jupyter，Matlab，Rstudio等多种在线IDE类型
  - Jupyter支持CubeStudio sdk，Julia，R，python，pyspark多内核版本，
 
-![image](https://github.com/tencentmusic/cube-studio/assets/20157705/0819214b-d7c1-421a-8978-465f20b8d594)
+![image](https://cube-studio.oss-cn-hangzhou.aliyuncs.com/docs/csdn_image/08c6ca4391f6063e29a6ca451590598b.png)
 
 
  - 支持c++，java，conda等多种开发语言，以及tensorboard/git/gpu监控等多种插件
