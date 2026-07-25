@@ -19,7 +19,7 @@ sudo rm -rf /var/lib/containerd
 ```bash
 ### 设置docker存储库
 sudo apt-get update -y 
-sudo apt-get install -y ca-certificates curl gnupg lsb-release vim git wget net-tools
+sudo apt-get install -y ca-certificates curl gnupg lsb-release vim git wget net-tools software-properties-common
 
 ### 添加官方秘钥
 
@@ -31,10 +31,10 @@ rm -rf /etc/apt/sources.list.d/docker.list
 #curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 #echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-### 国内使用阿里源
-curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | apt-key add -
-arch=amd64   
-sudo add-apt-repository  -y "deb [arch=${arch}] http://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable"
+#### 国内使用阿里源，阿里的源好像也有点问题。
+#curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | apt-key add -
+#arch=amd64    # 或者arm64
+#sudo add-apt-repository  -y "deb [arch=${arch}] http://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable"
 
 ### 安装docker
 sudo apt-get update

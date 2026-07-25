@@ -100,131 +100,31 @@ metadata:
 #---
 
 ---
+# 统一的 pod 日志查看 + exec 权限，各命名空间通过 RoleBinding 引用
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: kubernetes-dashboard-pipeline
+  name: kubernetes-dashboard-pod-access
 rules:
-- apiGroups:
-  - ""
-  resources:
-  - pods/exec
-  verbs:
-  - get
-  - list
-  - watch
-  - create
-  - delete
-- apiGroups:
-  - ""
-  resources:
-  - pods
-  - events
-  - pods/log
-  verbs:
-  - get
-  - list
-  - watch
+- apiGroups: [""]
+  resources: [pods]
+  verbs: [get, list, watch]
+- apiGroups: [""]
+  resources: [pods/log]
+  verbs: [get, watch]
+- apiGroups: [""]
+  resources: [pods/exec]
+  verbs: [get, create]
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: kubernetes-dashboard-jupyter
-rules:
-- apiGroups:
-  - ""
-  resources:
-  - pods/exec
-  verbs:
-  - get
-  - list
-  - watch
-  - create
-  - delete
-- apiGroups:
-  - ""
-  resources:     # 只需要能搜索到就行
-  - services
-  - events
-  - pods
-  - pods/log
-  verbs:
-  - get
-  - list
-  - watch
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: kubernetes-dashboard-automl
-rules:
-- apiGroups:
-  - ""
-  resources:     # 只需要能搜索到就行
-  - services
-  - events
-  - pods
-  - pods/log
-  verbs:
-  - get
-  - list
-  - watch
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: kubernetes-dashboard-service
-rules:
-- apiGroups:
-  - ""
-  resources:
-  - pods/exec
-  verbs:
-  - get
-  - list
-  - watch
-  - create
-  - delete
-- apiGroups:
-  - ""
-  resources:
-  - pods
-  - events
-  - pods/log
-  - services
-  verbs:
-  - get
-  - list
-  - watch
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: kubernetes-dashboard-aihub
-rules:
-- apiGroups:
-  - ""
-  resources:     # 只需要能搜索到就行
-  - pods
-  - deployments
-  - services
-  - events
-  - pods/log
-  verbs:
-  - list
-  - get
-  - watch
----
-
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: kubernetes-dashboard-pipeline
-  namespace: pipeline      # 生效空间
+  name: kubernetes-dashboard-pod-access
+  namespace: pipeline
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: kubernetes-dashboard-pipeline   # 仅pipeline空间可以有权限
+  name: kubernetes-dashboard-pod-access
 subjects:
 - kind: ServiceAccount
   name: kubernetes-dashboard-user1
@@ -233,12 +133,12 @@ subjects:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: kubernetes-dashboard-automl
-  namespace: automl        # 生效空间
+  name: kubernetes-dashboard-pod-access
+  namespace: automl
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: kubernetes-dashboard-automl
+  name: kubernetes-dashboard-pod-access
 subjects:
 - kind: ServiceAccount
   name: kubernetes-dashboard-user1
@@ -247,12 +147,12 @@ subjects:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: kubernetes-dashboard-service
-  namespace: service      # 生效空间
+  name: kubernetes-dashboard-pod-access
+  namespace: service
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: kubernetes-dashboard-service
+  name: kubernetes-dashboard-pod-access
 subjects:
 - kind: ServiceAccount
   name: kubernetes-dashboard-user1
@@ -261,12 +161,12 @@ subjects:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: kubernetes-dashboard-jupyter
-  namespace: jupyter      # 生效空间
+  name: kubernetes-dashboard-pod-access
+  namespace: jupyter
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: kubernetes-dashboard-jupyter
+  name: kubernetes-dashboard-pod-access
 subjects:
 - kind: ServiceAccount
   name: kubernetes-dashboard-user1
@@ -275,18 +175,31 @@ subjects:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: kubernetes-dashboard-aihub
-  namespace: aihub      # 生效空间
+  name: kubernetes-dashboard-pod-access
+  namespace: aihub
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: kubernetes-dashboard-aihub
+  name: kubernetes-dashboard-pod-access
 subjects:
 - kind: ServiceAccount
   name: kubernetes-dashboard-user1
   namespace: kube-system
 ---
-
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: kubernetes-dashboard-pod-access
+  namespace: rental
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kubernetes-dashboard-pod-access
+subjects:
+- kind: ServiceAccount
+  name: kubernetes-dashboard-user1
+  namespace: kube-system
+---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
