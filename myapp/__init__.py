@@ -180,11 +180,6 @@ if conf.get("ENABLE_CHUNK_ENCODING"):
 
     app.wsgi_app = ChunkedEncodingFix(app.wsgi_app)
 
-if conf.get("UPLOAD_FOLDER"):
-    try:
-        os.makedirs(conf.get("UPLOAD_FOLDER"))
-    except OSError:
-        pass
 
 if conf.get("ADDITIONAL_MIDDLEWARE"):
     for middleware in conf.get("ADDITIONAL_MIDDLEWARE"):

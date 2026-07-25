@@ -479,9 +479,7 @@ class Workflow_ModelView_Base():
     def log_node(self, cluster_name, namespace, workflow_name, pod_name,file_name='main.log'):
         log = self.get_minio_content(f'{workflow_name}/{pod_name}/{file_name}')
         if '/web/log/' in request.path:
-            from wtforms.widgets.core import HTMLString, html_params
-
-            return Markup("<pre><code>%s</code></pre>"%log)
+            return Markup("<pre><code>%s</code></pre>") % log
         return jsonify({
             "status": 0,
             "message": "",
@@ -557,7 +555,8 @@ class Workflow_ModelView_Base():
         # print(key[key.rindex('.'):])
         if key[key.rindex('.'):] in ['.txt','.json','.log','.csv']:
             if type(content)==bytes:
-                content = content.decode()
+                # 日志里可能夹带 tqdm 进度条/二进制等非法 UTF-8 字节，严格 decode 会抛 UnicodeDecodeError 导致整页 500，这里用 replace 兜底把非法字节替换成 �
+                content = content.decode('utf-8', errors='replace')
 
             # 删除 ANSI 转义序列
             ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')

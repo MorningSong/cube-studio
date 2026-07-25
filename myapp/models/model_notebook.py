@@ -157,8 +157,7 @@ class Notebook(Model,AuditMixinNullable,MyappModelBase):
     # 清空激活
     @property
     def renew(self):
-        object_info = conf.get("CRD_INFO", {}).get('notebook', {})
-        timeout = int(object_info.get('timeout', 60 * 60 * 24 * 3))
+        timeout = int(conf.get('ENABLE_JUPYTER_EXPIRY',conf.get("CRD_INFO", {}).get('notebook', {}).get('timeout', 60 * 60 * 24 * 3)))
 
         end = self.changed_on+datetime.timedelta(seconds=timeout)
         end = end.strftime('%Y-%m-%d')
